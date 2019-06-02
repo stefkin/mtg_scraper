@@ -4,13 +4,15 @@ module MtgScraper::Cards::ETL
   module_function
 
   def call(set_name)
-    page_numbers(set_name).flat_map do |page|
-      set_html(set_name, page: page)
-        .search('span.cardTitle a')
-        .map { |node| extract_card_link(node) }
-        .map(&MtgScraper::Card::Extract.to_proc >>
-             MtgScraper::Card::Transform.to_proc >>
-             MtgScraper::Card::Load.to_proc)
+    page_numbers(set_name).map do |page|
+      Thread.new do
+        set_html(set_name, page: page)
+          .search('span.cardTitle a')
+          .map { |node| extract_card_link(node) }
+          .map(&MtgScraper::Card::Extract.to_proc >>
+               MtgScraper::Card::Transform.to_proc >>
+               MtgScraper::Card::Load.to_proc)
+      end
     end
   end
 

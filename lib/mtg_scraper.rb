@@ -12,6 +12,7 @@ module MtgScraper
       .call
       .tap(&MtgScraper::Sets::Load)
       .map(&MtgScraper::Cards::ETL)
+      .map(&:join)
   end
 end
 
