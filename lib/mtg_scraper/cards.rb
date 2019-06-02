@@ -1,0 +1,2 @@
+module MtgScraper::Cards
+end
