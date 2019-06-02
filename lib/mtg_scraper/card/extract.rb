@@ -12,7 +12,7 @@ module MtgScraper::Card::Extract
     power_and_toughness: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ptRow div.value").children.text.strip },
     set: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_currentSetSymbol a").last.content.strip },
     rarity: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rarityRow div.value span").first.content.strip },
-    number: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_numberRow div.value").first.content.strip },
+    number: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_numberRow div.value").first&.content&.strip },
     artist: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_artistRow div.value a").text.strip },
     image_url: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage").first.attr("src") },
   }.freeze

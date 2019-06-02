@@ -25,7 +25,7 @@ task :init_db do
     Integer :toughness
     foreign_key :set_id, :sets
     String :rarity, null: false
-    Integer :number, null: false
+    Integer :number
     String :artist, null: false
     String :image_url, null: false
 
