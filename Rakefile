@@ -21,7 +21,8 @@ task :init_db do
     add_column :mana_cost, type: 'text[]', null: false
     Integer :converted_mana_cost, null: false
     String :types, null: false
-    String :power_and_toughness, null: false
+    Integer :power
+    Integer :toughness
     foreign_key :set_id, :sets
     String :rarity, null: false
     Integer :number, null: false

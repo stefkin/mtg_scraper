@@ -7,7 +7,7 @@ module MtgScraper::Card::Extract
     name: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_nameRow div.value").text.strip },
     text: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_textRow div.value div.cardtextbox").map(&:content).map(&:strip).join("\n") },
     mana_cost: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow div.value img").map { |img| img.attr("alt") } },
-    converted_mana_cost: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow div.value").first.content.strip },
+    converted_mana_cost: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow div.value").first&.content&.strip },
     types: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_typeRow div.value").first.content.strip },
     power_and_toughness: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ptRow div.value").children.text.strip },
     set: -> (html) { html.search("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_currentSetSymbol a").last.content.strip },
@@ -18,12 +18,12 @@ module MtgScraper::Card::Extract
   }.freeze
 
   def call(link)
-    html = Nokogiri::HTML(Net::HTTP.get(link))
+    html = Nokogiri::HTML(Net::HTTP.get(p link))
 
     multiverse_id = CGI.parse(link.query)['multiverseid'].first
 
     EXTRACTORS.reduce(multiverse_id: multiverse_id) do |acc, (key, extractor)|
-      acc.merge(key => extractor.(html))
+      acc.merge(key => extractor.call(html))
     end
   end
 

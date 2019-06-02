@@ -8,7 +8,7 @@ module MtgScraper::Card::Load
   end
 
   def call(card)
-    card[:mana_cost] = Sequel.pg_array(card[:mana_cost])
+    card[:mana_cost] = Sequel.pg_array(card[:mana_cost], :text)
     MtgScraper::DB[:cards].insert(card)
   end
 end
