@@ -17,7 +17,7 @@ module MtgScraper::Card::Extract
   end
 
   def sections(html)
-    html.search("//div[contains(@id, 'componentWrapper')]")
+    html.search("//td[contains(@id, 'cardComponent') and @class='cardComponentContainer']/*")
   end
 
   def extractors
