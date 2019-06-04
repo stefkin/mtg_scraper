@@ -31,6 +31,7 @@ task :create_db do
     String :number
     String :artist, null: false
     String :image_url, null: false
+    String :flavor_text
 
     index [:set_id, :name]
     index :name

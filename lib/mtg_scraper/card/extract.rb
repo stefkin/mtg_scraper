@@ -33,6 +33,7 @@ module MtgScraper::Card::Extract
       number: -> (html) { html.search(".//div[contains(@id, 'numberRow')]/div[@class='value']").first&.content&.strip },
       artist: -> (html) { html.search(".//div[contains(@id, 'artistRow')]/div[@class='value']/a").text.strip },
       image_url: -> (html) { html.search(".//img[contains(@id, 'cardImage')]").first.attr("src") },
+      flavor_text: -> (html) { html.search(".//div[contains(@id, 'FlavorText')]/div[@class='flavortextbox']").text.strip },
     }
   end
 
