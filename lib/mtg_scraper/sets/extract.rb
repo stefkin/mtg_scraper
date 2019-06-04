@@ -6,7 +6,7 @@ module MtgScraper
       module_function
 
       def call
-        p Net::HTTP
+        Net::HTTP
           .get(Gatherer.sets_url)
           .yield_self { |raw_html| Nokogiri::HTML(raw_html) }
           .search('select#ctl00_ctl00_MainContent_Content_SearchControls_setAddText option')

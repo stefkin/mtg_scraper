@@ -4,10 +4,12 @@ task :scrape do
   MtgScraper.call
 end
 
-task :init_db do
+task :drop_db do
   MtgScraper::DB.drop_table(:cards)
   MtgScraper::DB.drop_table(:sets)
+end
 
+task :create_db do
   MtgScraper::DB.create_table(:sets) do
     primary_key :id
     String :name, null: false, unique: true
@@ -15,17 +17,18 @@ task :init_db do
 
   MtgScraper::DB.create_table(:cards) do
     primary_key :id
-    Bigint :multiverse_id, null: false, unique: true
-    String :name, null: false, unique: true
+    Bigint :multiverse_id, null: false
+    String :name, null: false
     String :text, null: false
-    add_column :mana_cost, type: 'text[]', null: false
-    Integer :converted_mana_cost, null: false
+    add_column :mana_cost, type: 'text[]'
+    Integer :converted_mana_cost
     String :types, null: false
     Integer :power
     Integer :toughness
     foreign_key :set_id, :sets
+    foreign_key :flip_card_id, :cards
     String :rarity, null: false
-    Integer :number
+    String :number
     String :artist, null: false
     String :image_url, null: false
 
@@ -34,4 +37,4 @@ task :init_db do
   end
 end
 
-task default: %i[init_db scrape]
+task default: %i[scrape]
