@@ -1,4 +1,4 @@
-* flip cards
+* DONE flip cards
 * flavor text
 * pgdump rake task
 * retry with backoff on 403

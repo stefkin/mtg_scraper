@@ -9,31 +9,15 @@ module MtgScraper::Cards::ETL
         set_html(set_name, page: page)
           .search('span.cardTitle a')
           .map { |node| extract_card_link(node) }
-          .map do |link|
-            if flip_card?(link)
-              flip_card_etl.call(link)
-            else
-              card_etl.call(link)
-            end
-          end
+          .map(&method(:card_etl))
       end
     end
-  end
-
-  def flip_card?(link)
-    MtgScraper::FlipCard.appears_on?(link)
   end
 
   def card_etl
     MtgScraper::Card::Extract.to_proc >>
       MtgScraper::Card::Transform.to_proc >>
       MtgScraper::Card::Load.to_proc
-  end
-
-  def flip_card_etl
-    MtgScraper::FlipCard::Extract.to_proc >>
-      MtgScraper::FlipCard::Transform.to_proc >>
-      MtgScraper::FlipCard::Load.to_proc
   end
 
   def extract_card_link(node)

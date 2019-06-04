@@ -7,19 +7,23 @@ module MtgScraper::Card::Transform
     method(:call).to_proc
   end
 
-  def call(card)
-    relative_url = card[:image_url]
-    absolute_url = Gatherer.build_path relative_url[6..-1], {}
-    card[:image_url] = absolute_url.to_s
+  def call(card_sides)
+    card_sides.map do |card|
+      relative_url = card[:image_url]
+      absolute_url = Gatherer.build_path relative_url[6..-1], {}
+      card[:image_url] = absolute_url.to_s
 
-    card[:set_id] = MtgScraper::DB[:sets].where(name: card.delete(:set)).first[:id]
+      card[:set_id] = MtgScraper::DB[:sets].where(name: card.delete(:set)).first[:id]
 
-    card[:converted_mana_cost] ||= 0
+      card[:converted_mana_cost] ||= 0
 
-    power, toughness = card.delete(:power_and_toughness).split('/')
-    card[:power] = power
-    card[:toughness] = toughness
+      power, toughness = card.delete(:power_and_toughness)
+                             .split('/')
+                             .map(&:strip)
+      card[:power] = power
+      card[:toughness] = toughness
 
-    card
+      card
+    end
   end
 end

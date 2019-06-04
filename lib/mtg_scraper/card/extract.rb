@@ -3,36 +3,36 @@
 module MtgScraper::Card::Extract
   module_function
 
-  def call(link, css_modifier: '')
+  def call(link)
     puts link
     html = Nokogiri::HTML(Net::HTTP.get(link))
 
     multiverse_id = CGI.parse(link.query)['multiverseid'].first
 
-    extractors(css_modifier).reduce(multiverse_id: multiverse_id) do |acc, (key, extractor)|
-      acc.merge(key => extractor.call(html))
+    sections(html).map do |section|
+      extractors.reduce(multiverse_id: multiverse_id) do |acc, (key, extractor)|
+        acc.merge(key => extractor.call(section))
+      end
     end
-  rescue StandardError => e
-    puts link
-    puts e.message
-    raise
   end
 
-  def extractors(css_modifier)
-    prefix = "ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_#{css_modifier}"
+  def sections(html)
+    html.search("//div[contains(@id, 'componentWrapper')]")
+  end
 
+  def extractors
     {
-      name: -> (html) { html.search("##{prefix}_nameRow div.value").text.strip },
-      text: -> (html) { html.search("##{prefix}_textRow div.value div.cardtextbox").map(&:content).map(&:strip).join("\n") },
-      mana_cost: -> (html) { html.search("##{prefix}_manaRow div.value img").map { |img| img.attr("alt") } },
-      converted_mana_cost: -> (html) { html.search("##{prefix}_cmcRow div.value").first&.content&.strip },
-      types: -> (html) { html.search(p "##{prefix}_typeRow div.value").first.content.strip },
-      power_and_toughness: -> (html) { html.search("##{prefix}_ptRow div.value").children.text.strip },
-      set: -> (html) { html.search("##{prefix}_currentSetSymbol a").last.content.strip },
-      rarity: -> (html) { html.search("##{prefix}_rarityRow div.value span").first.content.strip },
-      number: -> (html) { html.search("##{prefix}_numberRow div.value").first&.content&.strip },
-      artist: -> (html) { html.search("##{prefix}_artistRow div.value a").text.strip },
-      image_url: -> (html) { html.search("##{prefix}_cardImage").first.attr("src") },
+      name: -> (html) { html.search(".//div[contains(@id, 'nameRow')]/div[@class='value']").text.strip },
+      text: -> (html) { html.search(".//div[contains(@id, 'textRow')]/div[@class='value']/div[@class='cardtextbox']").map(&:content).map(&:strip).join("\n") },
+      mana_cost: -> (html) { html.search(".//div[contains(@id, 'manaRow')]/div[@class='value']/img").map { |img| img.attr("alt") } },
+      converted_mana_cost: -> (html) { html.search(".//div[contains(@id, 'cmcRow')]/div[@class='value']").first&.content&.strip },
+      types: -> (html) { html.search(".//div[contains(@id, 'typeRow')]/div[@class='value']").first.content.strip },
+      power_and_toughness: -> (html) { html.search(".//div[contains(@id, 'ptRow')]/div[@class='value']").children.text.strip },
+      set: -> (html) { html.search(".//div[contains(@id, 'currentSetSymbol')]/a").last.content.strip },
+      rarity: -> (html) { html.search(".//div[contains(@id, 'rarityRow')]/div[@class='value']/span").first.content.strip },
+      number: -> (html) { html.search(".//div[contains(@id, 'numberRow')]/div[@class='value']").first&.content&.strip },
+      artist: -> (html) { html.search(".//div[contains(@id, 'artistRow')]/div[@class='value']/a").text.strip },
+      image_url: -> (html) { html.search(".//img[contains(@id, 'cardImage')]").first.attr("src") },
     }
   end
 
