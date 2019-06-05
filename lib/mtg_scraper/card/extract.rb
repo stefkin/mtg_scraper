@@ -4,14 +4,16 @@ module MtgScraper::Card::Extract
   module_function
 
   def call(link)
-    puts link
-    html = Nokogiri::HTML(Net::HTTP.get(link))
+      puts link
+      MtgScraper::Retryable.call(link) do
+      html = Nokogiri::HTML(Net::HTTP.get(link))
 
-    multiverse_id = CGI.parse(link.query)['multiverseid'].first
+      multiverse_id = CGI.parse(link.query)['multiverseid'].first
 
-    sections(html).map do |section|
-      extractors.reduce(multiverse_id: multiverse_id) do |acc, (key, extractor)|
-        acc.merge(key => extractor.call(section))
+      sections(html).map do |section|
+        extractors.reduce(multiverse_id: multiverse_id) do |acc, (key, extractor)|
+          acc.merge(key => extractor.call(section))
+        end
       end
     end
   end

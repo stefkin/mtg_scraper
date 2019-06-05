@@ -3,5 +3,7 @@
 * pgdump rake task
 * retry with backoff on 403
 
+* readme and straghtforward rake task
+
 * DONE */* PT
 https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=409988

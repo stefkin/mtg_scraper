@@ -18,6 +18,7 @@ end
 
 require_relative 'mtg_scraper/db'
 require_relative 'mtg_scraper/gatherer'
+require_relative 'mtg_scraper/retryable'
 require_relative 'mtg_scraper/sets'
 require_relative 'mtg_scraper/sets/extract'
 require_relative 'mtg_scraper/sets/load'

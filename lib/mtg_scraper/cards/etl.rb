@@ -9,15 +9,11 @@ module MtgScraper::Cards::ETL
         set_html(set_name, page: page)
           .search('span.cardTitle a')
           .map { |node| extract_card_link(node) }
-          .map(&method(:card_etl))
+          .map(&MtgScraper::Card::Extract.to_proc >>
+                MtgScraper::Card::Transform.to_proc >>
+                MtgScraper::Card::Load.to_proc)
       end
     end
-  end
-
-  def card_etl
-    MtgScraper::Card::Extract.to_proc >>
-      MtgScraper::Card::Transform.to_proc >>
-      MtgScraper::Card::Load.to_proc
   end
 
   def extract_card_link(node)
