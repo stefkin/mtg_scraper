@@ -23,8 +23,8 @@ task :create_db do
     add_column :mana_cost, type: 'text[]'
     Integer :converted_mana_cost
     String :types, null: false
-    Integer :power
-    Integer :toughness
+    String :power
+    String :toughness
     foreign_key :set_id, :sets
     foreign_key :flip_card_id, :cards
     String :rarity, null: false
