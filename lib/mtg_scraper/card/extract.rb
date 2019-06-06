@@ -4,8 +4,8 @@ module MtgScraper::Card::Extract
   module_function
 
   def call(link)
-      puts link
-      MtgScraper::Retryable.call(link) do
+    puts link
+    MtgScraper::Retryable.call(on_failure: -> { append_failure(link) }) do
       html = Nokogiri::HTML(Net::HTTP.get(link))
 
       multiverse_id = CGI.parse(link.query)['multiverseid'].first
@@ -41,5 +41,9 @@ module MtgScraper::Card::Extract
 
   def to_proc
     method(:call).to_proc
+  end
+
+  def append_failure(link)
+    File.write('failures.org', link, File.size('failures.org'), mode: 'a')
   end
 end

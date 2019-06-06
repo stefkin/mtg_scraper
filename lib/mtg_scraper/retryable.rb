@@ -1,7 +1,7 @@
 module MtgScraper::Retryable
   module_function
 
-  def call(link, attempts = 5, timeout = 10, &block)
+  def call(link, attempts = 5, timeout = 10, on_failure:, &block)
     block.call
   rescue StandardError => e
     puts e.message
@@ -11,7 +11,7 @@ module MtgScraper::Retryable
     if attempts > 1
       call(link, attempts - 1, timeout, &block)
     else
-      File.write('failures2.org', link, File.size('failures2.org'), mode: 'a')
+      on_failure.call
     end
   end
 end
