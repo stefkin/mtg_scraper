@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-module MtgScraper::Cards::ETL
-  module_function
+module MtgScraper::Card::ETL
+  extend MtgScraper::Procify
+  extend self
 
   def call(set_name)
     page_numbers(set_name).map do |page|
@@ -31,9 +32,5 @@ module MtgScraper::Cards::ETL
       .cards_url(set_name, page: page)
       .yield_self { |url| Net::HTTP.get(url) }
       .yield_self { |raw_html| Nokogiri::HTML(raw_html) }
-  end
-
-  def to_proc
-    method(:call).to_proc
   end
 end

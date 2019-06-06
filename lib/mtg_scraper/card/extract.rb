@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module MtgScraper::Card::Extract
-  module_function
+  extend MtgScraper::Procify
+  extend self
 
   def call(link)
     puts link
@@ -37,10 +38,6 @@ module MtgScraper::Card::Extract
       image_url: -> (html) { html.search(".//img[contains(@id, 'cardImage')]").first.attr("src") },
       flavor_text: -> (html) { html.search(".//div[contains(@id, 'FlavorText')]/div[@class='flavortextbox']").text.strip },
     }
-  end
-
-  def to_proc
-    method(:call).to_proc
   end
 
   def append_failure(link)

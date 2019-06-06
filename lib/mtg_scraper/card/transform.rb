@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module MtgScraper::Card::Transform
-  module_function
-
-  def to_proc
-    method(:call).to_proc
-  end
+  extend MtgScraper::Procify
+  extend self
 
   def call(card_sides)
     card_sides.map do |card|
