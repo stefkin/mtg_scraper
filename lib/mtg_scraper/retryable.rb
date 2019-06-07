@@ -9,7 +9,7 @@ module MtgScraper::Retryable
     puts "retrying in #{timeout} sec. #{attempts} attempts left"
     sleep timeout
     if attempts > 1
-      call(attempts - 1, timeout, &block)
+      call(attempts - 1, timeout, on_failure: on_failure, &block)
     else
       on_failure.call
     end
