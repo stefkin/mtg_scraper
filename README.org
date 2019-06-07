@@ -11,6 +11,10 @@ You can download the latest DB dump on [[https://github.com/stefkin/mtg_scraper/
 ** Usage
 *** initialize database
 Database connection can be configured in [[https://github.com/stefkin/mtg_scraper/blob/master/lib/mtg_scraper/db.rb][lib/mtg_scraper/db.rb]]
-use rake db:create to initialize DB structure
+#+BEGIN_SRC
+rake db:create # initialize DB structure
+#+END_SRC
 *** run scraper
+#+BEGIN_SRC
 rake scrape
+#+END_SRC
