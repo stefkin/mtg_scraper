@@ -1,0 +1,11 @@
+* MTG scraper
+Scraper for https://gatherer.wizards.com
+
+** Installation
+*** system dependencies
+**** postgresql
+**** [nokogiri deps][https://nokogiri.org/tutorials/installing_nokogiri.html]
+** Usage
+*** postgres: `create databse mtg;`
+*** `rake db:create` - creates db structure
+*** `rake scrape` - scrapes gatherer
