@@ -1,5 +1,6 @@
 * MTG scraper
-Scraper for https://gatherer.wizards.com
+
+mtg_scraper provides a ready to use PostgreSQL database containing Magic: the gathering cards and sets as well as a script to download fresh database from https://gatherer.wizards.com
 
 ** Download
 You can download the latest DB dump on [[https://github.com/stefkin/mtg_scraper/releases/tag/0.1][Releases]] page
