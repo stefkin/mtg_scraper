@@ -1,4 +1,6 @@
+# typed: true
 module MtgScraper::Retryable
+  include Kernel
   module_function
 
   def call(attempts = 5, timeout = 10, on_failure:, &block)

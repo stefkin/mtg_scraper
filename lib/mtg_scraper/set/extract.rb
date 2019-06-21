@@ -1,9 +1,12 @@
+# typed: true
 # frozen_string_literal: true
 
 module MtgScraper::Set::Extract
+  extend T::Sig
   extend MtgScraper::Procify
   extend self
 
+  sig { returns(T::Array[String]) }
   def call
     Net::HTTP
       .get(Gatherer.sets_url)

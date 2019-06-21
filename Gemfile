@@ -7,3 +7,6 @@ group :development do
   gem 'pry'
   gem 'rubocop'
 end
+
+gem 'sorbet', :group => :development
+gem 'sorbet-runtime'

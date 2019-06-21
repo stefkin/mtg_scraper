@@ -1,11 +1,17 @@
+# typed: true
 # frozen_string_literal: true
 
 require 'nokogiri'
 require 'cgi'
 require 'net/http'
+require 'sorbet-runtime'
 
 module MtgScraper
+  extend T::Sig
+
   module_function
+
+  sig { returns(T::Array[Thread]) }
 
   def call
     MtgScraper::Set::Extract
